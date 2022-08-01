@@ -1,13 +1,10 @@
 import './App.css'
+import Header from './Components/Header';
 import person from "./Resources/gray-person.png";
 
 function App() {
   return (
-    <div className="Header">
-      <div className="User-logo">
-        <img src={person} alt="" width="100px" height="100px"/>
-      </div>
-    </div>
+    <Header user={{id: 1337, logo: person, username: 'pidor', description: 'What does the fox say?'}}/>
   );
 }
 
