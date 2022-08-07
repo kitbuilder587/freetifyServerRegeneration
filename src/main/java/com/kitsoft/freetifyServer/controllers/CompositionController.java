@@ -2,6 +2,7 @@ package com.kitsoft.freetifyServer.controllers;
 
 import com.kitsoft.freetifyServer.config.KeycloakRoleConverter;
 import com.kitsoft.freetifyServer.services.CompositionService;
+import com.kitsoft.freetifyServer.services.UserRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,16 +30,12 @@ public class CompositionController {
 
     private Logger logger = Logger.getLogger(CompositionController.class.getName());
 
+    @Autowired
     private CompositionService compositionService;
 
-    @Autowired
-    public CompositionController(CompositionService compositionService){
-        this.compositionService = compositionService;
-    }
 
     @GetMapping(path = "/create")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    @PreAuthorize("hasRole('ROLE_user')")
     public String addComposition(@AuthenticationPrincipal Jwt principal) {
         return "Hello, " + principal.getClaims().get("user_name");
     }
