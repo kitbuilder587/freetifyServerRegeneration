@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Data
@@ -16,7 +17,10 @@ public class Playlist {
 
     private String name;
 
-    @ManyToMany()
+    @ManyToMany(fetch = FetchType.LAZY,
+            mappedBy = "playlists")
+    @JsonIgnore
+    private Set<Composition> compositions;
 
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})

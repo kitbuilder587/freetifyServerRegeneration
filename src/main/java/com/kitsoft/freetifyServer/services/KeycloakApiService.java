@@ -42,7 +42,7 @@ public class KeycloakApiService {
 
     RestTemplate restTemplate = new RestTemplate();
 
-    public String getAccessToken(){
+    public String getAccessToken(String username, String password){
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType("application/x-www-form-urlencoded"));
@@ -50,8 +50,8 @@ public class KeycloakApiService {
 
         MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
         map.add("grant_type", "password");
-        map.add("username", clientUsername);
-        map.add("password", clientPassword);
+        map.add("username", username);
+        map.add("password", password);
         map.add("client_id", "freetify-oauth2-client");
         map.add("client_secret", clientSecret);
 
@@ -64,6 +64,10 @@ public class KeycloakApiService {
         Map<String,String> s = response.getBody();
 
         return (String) s.get("access_token");
+    }
+
+    public String getAdminAccessToken(){
+        return getAccessToken(clientUsername,clientPassword);
     }
 
     public List<String> getUsersNames(String accessToken){
@@ -87,7 +91,7 @@ public class KeycloakApiService {
         credentials.put("temporary", false);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("username", username);
-        jsonObject.put("credentials", Collections.singletonList(credentials));
+        jsonObject.put("credentials", credentials);
         HttpEntity<String> request = new HttpEntity<String>(jsonObject.toJSONString(),headers);
         String apiUrl = keycloakHost + "auth/admin/realms/" + keycloakRealm + "/users";
         ResponseEntity<Object> response = restTemplate.exchange(apiUrl, HttpMethod.POST, request, new ParameterizedTypeReference<Object>() {});

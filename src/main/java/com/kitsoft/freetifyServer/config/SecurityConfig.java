@@ -24,7 +24,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-                .antMatchers("/registration");
+                .antMatchers("/registration")
+                .antMatchers("/registration/token");
     }
 
     @Override
@@ -35,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         http.oauth2Client();
         http
                 .authorizeRequests()
-                .antMatchers("/**").permitAll()
+                .antMatchers("/registration/**").permitAll()
                 .antMatchers("/api/**").authenticated()
                 .and().csrf().disable()
                 .oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthenticationConverter);

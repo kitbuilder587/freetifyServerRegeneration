@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Data
@@ -31,7 +29,26 @@ public class Composition {
     @JsonIgnore
     private User compositionCreator;
 
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST,CascadeType.MERGE, CascadeType.REFRESH})
+    @JsonIgnore
+    private Set<User> listeners;
+
 
     private Long pictureStorageId = -1L;
-    private Long soundStorageId = -1L;
+    private Long torrentStorageId = -1L;
+    private Long torrentFileId = -1L;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Composition that = (Composition) o;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

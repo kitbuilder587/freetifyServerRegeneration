@@ -1,5 +1,7 @@
 package com.kitsoft.freetifyServer.services;
 
+import com.kitsoft.freetifyServer.entities.User;
+import com.kitsoft.freetifyServer.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -27,9 +29,19 @@ public class UserRegistrationService {
     @Autowired
     KeycloakApiService keycloakApiService;
 
+    @Autowired
+    UserRepository userRepository;
+
     public void createUser(String username, String password) {
-        String token = keycloakApiService.getAccessToken();
+        String token = keycloakApiService.getAdminAccessToken();
         keycloakApiService.addUser(token, username,password);
+        User user = new User();
+        user.setUsername(username);
+        userRepository.save(user);
+    }
+
+    public String getToken(String username, String password){
+        return keycloakApiService.getAccessToken(username, password);
     }
 
 
